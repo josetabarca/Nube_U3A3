@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend - Actividad 3.3 - AJAX</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <h1>Tabla de Registros</h1>
+    <div>
+        <input type="text" id="search" placeholder="Buscar...">
+        <button id="addRecord">Agregar Registro</button>
+    </div>
+    <table id="recordsTable">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Elemento</th>
+                <th>Etapa</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Los registros se insertarán aquí -->
+        </tbody>
+    </table>
+    <div id="pagination">
+        <button id="prevPage">Anterior</button>
+        <span id="pageInfo"></span>
+        <button id="nextPage">Siguiente</button>
+    </div>
+</body>
+</html>
