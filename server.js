@@ -4,7 +4,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 5432;
 const secretKey = 'clave_secreta';
 
 app.use(bodyParser.json());
@@ -12,7 +12,7 @@ app.use(cors());
 
 
 const corsOptions = {
-    origin: 'http://127.0.0.1:5500', 
+    origin: 'postgresql://josaba:ot6VbBXTrksEbHwfcN5SRbVTQnUEHH6r@dpg-d03vfmruibrs73f5vab0-a/registrosdb', 
     optionsSuccessStatus: 200
     };
     
@@ -20,15 +20,15 @@ const corsOptions = {
     
 
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'registrosDB'
+    host: 'dpg-d03vfmruibrs73f5vab0-a',
+    user: 'josaba',
+    password: 'ot6VbBXTrksEbHwfcN5SRbVTQnUEHH6r',
+    database: 'registrosdb'
 });
 
 db.connect((err) => {
     if (err) throw err;
-    console.log('Conectado a la base de datos MySQL');
+    console.log('Conectado a la base de datos');
 });
 
 app.get('/registros', (req, res) => {
