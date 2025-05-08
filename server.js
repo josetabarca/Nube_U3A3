@@ -9,17 +9,17 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const corsOptions = {
-    origin: 'postgresql://josaba:ot6VbBXTrksEbHwfcN5SRbVTQnUEHH6r@dpg-d03vfmruibrs73f5vab0-a/registrosdb', 
+    origin: 'https://tu-dominio-en-render.com',
     optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
 
 const db = mysql.createConnection({
-    host: 'dpg-d03vfmruibrs73f5vab0-a',
-    user: 'josaba',
-    password: 'ot6VbBXTrksEbHwfcN5SRbVTQnUEHH6r',
-    database: 'registrosdb'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
 db.connect((err) => {
@@ -60,5 +60,5 @@ app.delete('/registros/:id', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Servidor corriendo en http://localhost:${port}`);
+    console.log(`Servidor corriendo en render:${port}`);
 });
