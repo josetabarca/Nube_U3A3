@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const mysql = require('mysql');
+const { Pool } = require('pg');
 const app = express();
 const port = process.env.PORT || 5432;
 
@@ -15,50 +15,54 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-const db = mysql.createConnection({
+const pool = new Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT || 5432
 });
 
-db.connect((err) => {
-    if (err) throw err;
-    console.log('Conectado a la base de datos');
+app.get('/registros', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM registros');
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
-app.get('/registros', (req, res) => {
-    db.query('SELECT * FROM registros', (err, results) => {
-        if (err) throw err;
-        res.json(results);
-    });
-});
-
-app.post('/registros', (req, res) => {
+app.post('/registros', async (req, res) => {
     const nuevoRegistro = req.body;
-    db.query('INSERT INTO registros SET ?', nuevoRegistro, (err, result) => {
-        if (err) throw err;
-        res.json({ id: result.insertId, ...nuevoRegistro });
-    });
+    try {
+        const result = await pool.query('INSERT INTO registros (nombre, elemento, etapa) VALUES ($1, $2, $3) RETURNING *', [nuevoRegistro.nombre, nuevoRegistro.elemento, nuevoRegistro.etapa]);
+        res.json(result.rows[0]);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
-app.put('/registros/:id', (req, res) => {
+app.put('/registros/:id', async (req, res) => {
     const id = req.params.id;
     const datosActualizados = req.body;
-    db.query('UPDATE registros SET ? WHERE id = ?', [datosActualizados, id], (err, result) => {
-        if (err) throw err;
-        res.json({ id, ...datosActualizados });
-    });
+    try {
+        const result = await pool.query('UPDATE registros SET nombre = $1, elemento = $2, etapa = $3 WHERE id = $4 RETURNING *', [datosActualizados.nombre, datosActualizados.elemento, datosActualizados.etapa, id]);
+        res.json(result.rows[0]);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
-app.delete('/registros/:id', (req, res) => {
+app.delete('/registros/:id', async (req, res) => {
     const id = req.params.id;
-    db.query('DELETE FROM registros WHERE id = ?', id, (err, result) => {
-        if (err) throw err;
+    try {
+        await pool.query('DELETE FROM registros WHERE id = $1', [id]);
         res.json({ message: 'Registro eliminado' });
-    });
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
 app.listen(port, () => {
-    console.log(`Servidor corriendo en render:${port}`);
+    console.log(`Servidor corriendo en http://localhost:${port}`);
 });
