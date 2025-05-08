@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const corsOptions = {
-    origin: 'https://tu-dominio-en-render.com',
+    origin: 'https://nube-u3a3-1.onrender.com/',
     optionsSuccessStatus: 200
 };
 
