@@ -1,23 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 const app = express();
 const port = process.env.PORT || 5432;
-const secretKey = 'clave_secreta';
 
 app.use(bodyParser.json());
 app.use(cors());
 
-
 const corsOptions = {
     origin: 'postgresql://josaba:ot6VbBXTrksEbHwfcN5SRbVTQnUEHH6r@dpg-d03vfmruibrs73f5vab0-a/registrosdb', 
     optionsSuccessStatus: 200
-    };
-    
-    app.use(cors(corsOptions));
-    
+};
+
+app.use(cors(corsOptions));
 
 const db = mysql.createConnection({
     host: 'dpg-d03vfmruibrs73f5vab0-a',
@@ -62,28 +58,6 @@ app.delete('/registros/:id', (req, res) => {
         res.json({ message: 'Registro eliminado' });
     });
 });
-
-app.post('/login', (req, res) => {
-    const user = req.body;
-    if (user.username === 'joset' && user.password === 'udg') {
-        const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
-        res.json({ token });
-    } else {
-        res.status(401).send('Usuario o contraseña incorrectos');
-    }
-});
-
-function verifyToken(req, res, next) {
-    const token = req.headers['authorization'];
-    if (!token) return res.status(403).send('Token requerido');
-    jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) return res.status(500).send('Token inválido');
-        req.user = decoded;
-        next();
-    });
-}
-
-app.use(verifyToken);
 
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
