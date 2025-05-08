@@ -4,7 +4,7 @@ $(document).ready(function() {
 
     function fetchRecords() {
         $.ajax({
-            url: 'postgresql://josaba:ot6VbBXTrksEbHwfcN5SRbVTQnUEHH6r@dpg-d03vfmruibrs73f5vab0-a/registrosdb/registros',
+            url: 'https://nube-u3a3-1.onrender.com/registros',
             method: 'GET',
             success: function(data) {
                 displayRecords(data);
@@ -52,7 +52,7 @@ $(document).ready(function() {
     $('#search').on('input', function() {
         const query = $(this).val().toLowerCase();
         $.ajax({
-            url: 'postgresql://josaba:ot6VbBXTrksEbHwfcN5SRbVTQnUEHH6r@dpg-d03vfmruibrs73f5vab0-a/registrosdb/registros',
+            url: 'https://nube-u3a3-1.onrender.com/registros',
             method: 'GET',
             success: function(data) {
                 const filteredData = data.filter(record => 
@@ -72,7 +72,7 @@ $(document).ready(function() {
             etapa: prompt('Etapa:')
         };
         $.ajax({
-            url: 'postgresql://josaba:ot6VbBXTrksEbHwfcN5SRbVTQnUEHH6r@dpg-d03vfmruibrs73f5vab0-a/registrosdb/registros',
+            url: 'https://nube-u3a3-1.onrender.com/registros',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(newRecord),
@@ -88,7 +88,7 @@ $(document).ready(function() {
         const elemento = prompt('Nuevo Elemento:');
         const etapa = prompt('Nueva Etapa:');
         $.ajax({
-            url: `postgresql://josaba:ot6VbBXTrksEbHwfcN5SRbVTQnUEHH6r@dpg-d03vfmruibrs73f5vab0-a/registrosdb/registros/${id}`,
+            url: `https://nube-u3a3-1.onrender.com/registros/${id}`,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify({ nombre, elemento, etapa }),
@@ -101,7 +101,7 @@ $(document).ready(function() {
     $(document).on('click', '.delete', function() {
         const id = $(this).data('id');
         $.ajax({
-            url: `postgresql://josaba:ot6VbBXTrksEbHwfcN5SRbVTQnUEHH6r@dpg-d03vfmruibrs73f5vab0-a/registrosdb/registros/${id}`,
+            url: `https://nube-u3a3-1.onrender.com/registros/${id}`,
             method: 'DELETE',
             success: function() {
                 fetchRecords();
