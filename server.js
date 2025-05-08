@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { Pool } = require('pg');
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 5432;
 
@@ -9,11 +10,14 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const corsOptions = {
-    origin: 'https://nube-u3a3-1.onrender.com/',
+    origin: 'https://nube-u3a3-1.onrender.com',
     optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
+
+// Servir archivos estáticos desde la raíz del proyecto
+app.use(express.static(path.join(__dirname)));
 
 const pool = new Pool({
     host: process.env.DB_HOST,
@@ -64,5 +68,5 @@ app.delete('/registros/:id', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Servidor corriendo en http://localhost:${port}`);
+    console.log(`Servidor corriendo en Render en el puerto ${port}`);
 });
